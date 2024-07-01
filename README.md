@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Perago Information System
 ## React Task
 
@@ -62,4 +62,4 @@ NOTE: You can install any libraries if needed.
 The above libraries are already on the project (just npm install)
 =======
 pis-employee-hierarchy
->>>>>>> 89cbb88741388020ad592efc1d5ef02d4ad7c5fd
+
