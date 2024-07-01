@@ -1,4 +1,4 @@
-
+<<<<<<< HEAD
 # Perago Information System
 ## React Task
 
