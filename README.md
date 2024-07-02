@@ -1,9 +1,11 @@
-<<<<<<< HEAD
 # Perago Information System
+
 ## React Task
 
 ### Requirement
+
 Build SPA web application for registering organization's employee hierarchy or structure
+
 1. shall create employee position/role
 2. the position should be hierarchical there is a parent child relationship between the positions
   e.g. CEO can be root position no parent and CFO is a child of CEO
@@ -46,6 +48,7 @@ e.g.
 8. The forms in the app should be [Rect Hook Form](https://www.react-hook-form.com/) and have validation
 
 ### Resources to use (Required)
+
 - Framework [Mantine](https://mantine.dev/)
 - Styles [TailwindCss](https://tailwindcss.com/)
 - State Management [Redux Toolkit](https://redux-toolkit.js.org/)
@@ -55,11 +58,10 @@ e.g.
 - Use REST apis from [Firebase Database REST API](https://firebase.google.com/docs/reference/rest/database) or [Mockoon](https://mockoon.com/) or any other mock api
 
 ### Extra Resources
+
 - [Lodash](https://lodash.com/docs/)
 - [NextJs](https://nextjs.org/) (Not Installed)
 
 NOTE: You can install any libraries if needed.
 The above libraries are already on the project (just npm install)
-=======
 pis-employee-hierarchy
-
