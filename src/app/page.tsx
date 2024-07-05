@@ -1,19 +1,37 @@
-import React from 'react';
-
+"use client";
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import EmployeeForm from "./components/EmployeeForm";
+import EmployeeList from "./components/EmployeeList";
+import EmployeeTree from "./components/EmployeeTree";
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <div className="flex flex-col items-center justify-center w-full">
-          <h1 className="text-4xl font-bold text-center">
-            Welcome to the PIS Employment Hierarchy
-          </h1>
-          <p className="text-lg text-center">
-            A simple web application that allows you to view the employment hierarchy of the Perago Information System Agency.
-          </p>  
-          <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">SignUp</button>
-          </div>
+     <Router>
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <nav className="bg-gray-800 text-white p-4">
+          <ul className="flex space-x-4">
+            <li>
+              <Link to="/form" className="hover:text-gray-300">Employee Form</Link>
+            </li>
+            <li>
+              <Link to="/tree" className="hover:text-gray-300">Employee Tree</Link>
+            </li>
+            <li>
+              <Link to="/list" className="hover:text-gray-300">Employee List</Link>
+            </li>
+          </ul>
+        </nav>
+        <br /><br />
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<EmployeeForm />} />
+            <Route path="/form" element={<EmployeeForm />} />
+            <Route path="/tree" element={<EmployeeTree />} />
+            <Route path="/list" element={<EmployeeList />} />
+          </Routes>
+        </div>
       </div>
+    </Router>
     </main>
   );
 }
