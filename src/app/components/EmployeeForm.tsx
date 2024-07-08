@@ -44,16 +44,16 @@ const EmployeeForm: React.FC<EmployeeFormProps> = ({ employee, parentId }) => {
     <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
       <div className="mb-4">
         <label htmlFor="parentId" className="block text-gray-700 font-bold mb-2">Parent ID</label>
-        <input {...register("parentId", { valueAsNumber: true })} id="parentId" type="number" className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none" defaultValue={parentId || ''} />
+        <input {...register("parentId", { valueAsNumber: true })} id="parentId" type="number" className="border border-gray-300 text-black rounded-md px-3 py-2 w-full focus:outline-none" defaultValue={parentId || ''} />
       </div>
       <div className="mb-4">
         <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name</label>
-        <input {...register("name", { required: true })} id="name" type="text" className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500" placeholder="Enter name" />
+        <input {...register("name", { required: true })} id="name" type="text" className="border border-gray-300 text-black  rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500" placeholder="Enter name" />
         {errors.name && <span className="text-red-500 text-sm">Name is required</span>}
       </div>
       <div className="mb-4">
         <label htmlFor="description" className="block text-gray-700 font-bold mb-2">Description</label>
-        <textarea {...register("description")} id="description" className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500" placeholder="Enter description"></textarea>
+        <textarea {...register("description")} id="description" className="border border-gray-300  text-black  rounded-md px-3 py-2 w-full focus:outline-none focus:border-blue-500" placeholder="Enter description"></textarea>
       </div>
       <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">{employee ? 'Update' : 'Add'} Employee</button>
     </form>
