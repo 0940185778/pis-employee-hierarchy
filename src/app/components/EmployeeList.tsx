@@ -14,23 +14,34 @@ const EmployeeList: React.FC = () => {
     dispatch(fetchEmployeesThunk());
   }, [dispatch]);
 
-  const handleDelete = (id: number) => {
-    dispatch(deleteEmployeeThunk(id));
-  };
-
-  // State for managing the update modal
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [updatedName, setUpdatedName] = useState('');
   const [updatedDescription, setUpdatedDescription] = useState('');
   const [updatedParentId, setUpdatedParentId] = useState<number | undefined>();
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [employeeToDelete, setEmployeeToDelete] = useState<number | null>(null);
 
   const handleUpdate = (employee: Employee) => {
     setSelectedEmployee(employee);
-    setUpdatedName(employee.name); // Initialize form inputs with current values
-    setUpdatedDescription(employee.description || ''); // Initialize description if exists
-    setUpdatedParentId(employee.parentId); // Initialize parent ID if exists
+    setUpdatedName(employee.name);
+    setUpdatedDescription(employee.description || '');
+    setUpdatedParentId(employee.parentId);
     setShowUpdateModal(true);
+  };
+
+  const handleDelete = (id: number) => {
+    setEmployeeToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = () => {
+    if (employeeToDelete !== null) {
+      dispatch(deleteEmployeeThunk(employeeToDelete));
+    }
+    setShowDeleteModal(false);
   };
 
   const handleCloseModal = () => {
@@ -39,6 +50,7 @@ const EmployeeList: React.FC = () => {
     setUpdatedName('');
     setUpdatedDescription('');
     setUpdatedParentId(undefined);
+    setSuccessMessage(null);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -52,8 +64,9 @@ const EmployeeList: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
     if (selectedEmployee) {
       const updatedEmployee: Employee = {
         ...selectedEmployee,
@@ -61,9 +74,14 @@ const EmployeeList: React.FC = () => {
         description: updatedDescription,
         parentId: updatedParentId,
       };
-      dispatch(updateEmployeeThunk(updatedEmployee));
+      await dispatch(updateEmployeeThunk(updatedEmployee));
+      setSuccessMessage('Employee updated successfully!');
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 3000);
       handleCloseModal();
     }
+    setIsSubmitting(false);
   };
 
   if (status === 'loading') {
@@ -79,18 +97,18 @@ const EmployeeList: React.FC = () => {
       <h2 className="text-xl font-bold mb-4">Employee List</h2>
       <ul className="space-y-4">
         {employees.map((emp: Employee) => (
-          <li key={emp.id} className="flex justify-between items-center p-4 border text-black  border-gray-300 rounded-md">
+          <li key={emp.id} className="flex justify-between items-center p-4 border border-gray-300 rounded-md text-black">
             <span>{emp.name}</span>
             <div>
               <button 
                 onClick={() => handleUpdate(emp)} 
-                className="bg-blue-500 py-1 px-3 rounded-md mr-2 text-black  hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                className="bg-blue-500 py-1 px-3 rounded-md mr-2 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
               >
                 Update
               </button>
               <button 
                 onClick={() => handleDelete(emp.id)} 
-                className="bg-red-500 py-1 px-3 rounded-md text-black  hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                className="bg-red-500 py-1 px-3 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
               >
                 Delete
               </button>
@@ -99,7 +117,6 @@ const EmployeeList: React.FC = () => {
         ))}
       </ul>
 
-      {/* Modal for Update Employee */}
       {showUpdateModal && selectedEmployee && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -123,7 +140,7 @@ const EmployeeList: React.FC = () => {
                   name="description" 
                   value={updatedDescription} 
                   onChange={handleChange} 
-                  className="mt-1 block w-full px-3 py-2 border text-black  border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300  text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
               <div className="mb-4">
@@ -134,7 +151,7 @@ const EmployeeList: React.FC = () => {
                   name="parentId" 
                   value={updatedParentId || ''} 
                   onChange={handleChange} 
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 text-black  rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300  text-black rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
               <div className="flex justify-end">
@@ -147,12 +164,37 @@ const EmployeeList: React.FC = () => {
                 </button>
                 <button 
                   type="submit" 
+                  disabled={isSubmitting}
                   className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                 >
-                  Save
+                  {isSubmitting ? 'Saving...' : 'Save'}
                 </button>
               </div>
+              {successMessage && <div className="mt-4 p-4 bg-green-100 text-green-800 rounded-md">{successMessage}</div>}
             </form>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-black font-bold mb-4">Confirm Delete</h2>
+            <p className=' text-black'>Are you sure you want to delete this employee?</p>
+            <div className="flex justify-end mt-4">
+              <button 
+                onClick={() => setShowDeleteModal(false)} 
+                className="mr-2 bg-gray-300 text-gray-800 py-1 px-3 rounded-md hover:bg-gray-400 focus:outline-none focus:bg-gray-400"
+              >
+                No
+              </button>
+              <button 
+                onClick={confirmDelete} 
+                className="bg-red-500 text-black py-1 px-3 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+              >
+                Yes
+              </button>
+            </div>
           </div>
         </div>
       )}

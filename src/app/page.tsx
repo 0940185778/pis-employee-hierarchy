@@ -5,7 +5,7 @@ import EmployeeList from "./components/EmployeeList";
 import EmployeeTree from "./components/EmployeeTree";
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col  justify-between ">
      <Router>
       <div className="flex flex-col min-h-screen bg-gray-100">
         <nav className="bg-gray-800 text-white p-4">
